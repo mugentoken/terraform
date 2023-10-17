@@ -41,3 +41,23 @@ resource "azurerm_role_assignment" "af_role" {
   role_definition_id = data.azurerm_role_definition.storage_role.id
   principal_id       = azuread_group.aad_group.id
 }
+
+metadata:
+  id: "CKV2_AZURE_33"
+  name: "Ensure storage account is configured with private endpoint"
+  category: "GENERAL_SECURITY"
+
+definition: 
+  and:
+    - cond_type: "filter"
+      attribute: "resource_type"
+      operator: "within"
+      value:
+        - "azurerm_storage_account"
+
+    - cond_type: "connection"
+      resource_types: 
+        - "azurerm_storage_account"
+      connected_resource_types:
+        - "azurerm_private_endpoint"
+      operator: "exists"
